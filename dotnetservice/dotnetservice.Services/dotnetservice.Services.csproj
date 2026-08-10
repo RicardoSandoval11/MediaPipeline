@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\dotnetservice.Repositories\dotnetservice.Repositories.csproj" />
+    <ProjectReference Include="..\dotnetservice.Models\dotnetservice.Models.csproj" />
+    <ProjectReference Include="..\dotnetservice.Interfaces\dotnetservice.Interfaces.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.10" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.83.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\FileCounterService.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

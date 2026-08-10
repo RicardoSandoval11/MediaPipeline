@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/dotnetservice/">
+    <Project Path="dotnetservice/dotnetsevice.csproj" />
+  </Folder>
+  <Project Path="dotnetservice.DataAccess/dotnetservice.DataAccess.csproj" />
+  <Project Path="dotnetservice.Interfaces/dotnetservice.Interfaces.csproj" />
+  <Project Path="dotnetservice.Models/dotnetservice.Models.csproj" />
+  <Project Path="dotnetservice.Repositories/dotnetservice.Repositories.csproj" />
+  <Project Path="dotnetservice.Services/dotnetservice.Services.csproj" />
+</Solution>

@@ -1,0 +1,2 @@
+obj\Debug\net10.0\Protos/FileCounterService.cs \
+obj\Debug\net10.0\Protos/FileCounterServiceGrpc.cs: Protos/FileCounterService.proto
