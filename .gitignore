@@ -1,0 +1,6 @@
+# Ignorar bin y obj en cualquier nivel del repositorio
+**/bin/
+**/obj/
+
+# Opcional: ignorar binarios de Go si los compilas localmente
+/goservice/bin/

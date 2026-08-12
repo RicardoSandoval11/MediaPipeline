@@ -10,6 +10,6 @@ namespace dotnetservice.DataAccess.Models
 
         public Guid PublicId { get; set; }
 
-        public virtual IEnumerable<FileCounter> FileCounters { get; set; } = [];
+        public virtual ICollection<FileCounter> FileCounters { get; set; } = new List<FileCounter>();
     }
 }

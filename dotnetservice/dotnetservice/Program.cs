@@ -8,10 +8,13 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// gRPC requires HTTP/2; allow both protocols so REST (HTTP/1.1) keeps working on the same endpoint
+// Use dedicated ports to avoid HTTP/1.1 vs HTTP/2 negotiation issues for gRPC.
+// REST: http://localhost:5144 (HTTP/1.1)
+// gRPC: http://localhost:5145 (HTTP/2)
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ConfigureEndpointDefaults(o => o.Protocols = HttpProtocols.Http1AndHttp2);
+    options.ListenAnyIP(5144, o => o.Protocols = HttpProtocols.Http1);
+    options.ListenAnyIP(5145, o => o.Protocols = HttpProtocols.Http2);
 });
 
 // Add services to the container.
@@ -38,7 +41,10 @@ builder.Services.AddCors(options =>
                 );
             });
 
-builder.Services.AddGrpc();
+builder.Services.AddGrpc(options =>
+{
+    options.EnableDetailedErrors = appSettingsIsDevelopment(builder.Environment);
+});
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -66,3 +72,8 @@ app.MapControllers();
 app.MapGrpcService<FileCounterService>();
 
 await app.RunAsync();
+
+static bool appSettingsIsDevelopment(IHostEnvironment environment)
+{
+    return environment.IsDevelopment();
+}

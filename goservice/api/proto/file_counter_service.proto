@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "pkg/pb/file_counter_service";
+
+
+service FileCounterService {
+    rpc UpsertFileCounterAsync(UpsertFileCounterRequest) returns (UpsertFileCounterResponse);
+}
+
+message UpsertFileCounterRequest {
+    string userId = 1;
+}
+
+message UpsertFileCounterResponse {
+    bool success = 1;
+    optional bool limitReached = 2;
+    optional string error = 3;
+}
