@@ -20,7 +20,7 @@ spec:
         app: dotnet-service
     spec:
       containers:
-        - command: ["/app/dotnetservice"]
+        - command: ["/app/dotnetsevice"]
           envFrom:
             - configMapRef:
                 name: dotnet-configmap
@@ -36,16 +36,18 @@ spec:
               httpHeaders:
                 - name: Content-Type
                   value: application/json
-              path: /livez
-              port: 80
+              path: /api/v1/infra/livez
+              port: 5144
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 30
             successThreshold: 1
             timeoutSeconds: 15 
-          name: goservice
+          name: dotnetservice
           ports:
-            - containerPort: 80
+            - containerPort: 5144
+              protocol: TCP
+            - containerPort: 5145
               protocol: TCP
           readinessProbe:
             failureThreshold: 5
@@ -53,8 +55,8 @@ spec:
               httpHeaders:
                 - name: Content-Type
                   value: application/json
-              path: /readyz
-              port: 80
+              path: /api/v1/infra/readyz
+              port: 5144
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 10
