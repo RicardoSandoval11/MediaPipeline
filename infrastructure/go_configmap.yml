@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  SERVICE_NAME: "go-service"
+  SERVICE_VERSIO: "1.0.0"
+  APPLICATION_POR: ":8080"
+  ENVIRONMENT: "PROD"
+  FILE_COUNTER_GRPC_ADDR: ""
+immutable: true
+kind: ConfigMap
+metadata:
+  name: go-configmap
+  namespace: mediapipeline

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dotnet-configmap
+  namespace: mediapipeline
+immutable: true
+data:
+  Logging__LogLevel__Default: Information
+  Logging__LogLevel__Microsoft.AspNetCore: Warning
+  AllowedHosts: "*"
+  RestPort: 5144
+  GrpcPort: 5145

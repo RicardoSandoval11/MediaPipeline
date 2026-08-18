@@ -12,6 +12,7 @@ import (
 	"github.com/RicardoSandoval11/MediaPipeline/goservice/conf"
 	"github.com/RicardoSandoval11/MediaPipeline/goservice/db"
 	"github.com/RicardoSandoval11/MediaPipeline/goservice/db/migrations"
+	"github.com/RicardoSandoval11/MediaPipeline/goservice/pkg/infra"
 	"github.com/RicardoSandoval11/MediaPipeline/goservice/pkg/upload"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"google.golang.org/grpc"
@@ -47,21 +48,37 @@ func main() {
 		log.Fatalf("could not apply migrations to database: %v", err.Error())
 		os.Exit(1)
 	}
+
 	fileRepository := upload.NewPostgresqlRepository(dbInstance)
 	fileCounterEndpoint := upload.NewFileCounterGRPCClient(conn)
-
 	fileService := upload.NewUploadService(fileCounterEndpoint, fileRepository)
-
 	fileEndpoint := upload.MakeUploadFileEndpoint(fileService)
-
 	fileUploadHandler := httptransport.NewServer(
 		fileEndpoint,
 		upload.DecodeUploadFileRequest,
 		upload.EncodeUploadFileResponse,
 	)
 
+	infraService := infra.NewInfraService()
+	livenessEndpoint := infra.MakeLivenessEndpoint(infraService)
+	readinessEndpoint := infra.MakeReadinessEndpoint(infraService)
+
+	livenessHandler := httptransport.NewServer(
+		livenessEndpoint,
+		infra.DecodeLivenessRequest,
+		infra.EncodeLivenessResponse,
+	)
+
+	readinessHandler := httptransport.NewServer(
+		readinessEndpoint,
+		infra.DecodeReadinessRequest,
+		infra.EncodeReadinessResponse,
+	)
+
 	mux := http.NewServeMux()
 	mux.Handle("/upload-file", fileUploadHandler)
+	mux.Handle("/readyz", readinessHandler)
+	mux.Handle("/livez", livenessHandler)
 
 	errs := make(chan error)
 

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: psql-pvc
+  namespace: mediapipeline
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: "" # StorageClass por defecto de Minikube
+  resources:
+    requests:
+      storage: 1Gi # Único campo válido para definir el tamaño

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-service
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+    - name: dotnet-rest-port
+      appProtocol: tcp
+      port: 80
+      protocol: TCP
+      targetPort: 5144
+    - name: dotnet-grpc-port
+      appProtocol: kubernetes.io/h2c
+      port: 81
+      protocol: TCP
+      targetPort: 5145
+  selector:
+    app: dotnet-service
+  type: ClusterIP

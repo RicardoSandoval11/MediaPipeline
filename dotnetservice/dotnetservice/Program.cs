@@ -8,13 +8,32 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string connectionString = builder.Configuration["DbSettings:ConnectionString"] ?? "";
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new Exception("No connection string setup");
+}
+
+int restPort;
+
+if (!int.TryParse(builder.Configuration["RestPort"], out restPort))
+{
+    throw new Exception("Invalid REST port");
+}
+
+int grpcPort;
+
+if (!int.TryParse(builder.Configuration["GrpcPort"], out grpcPort))
+{
+    throw new Exception("Invalid GRPC port");
+}
+
 // Use dedicated ports to avoid HTTP/1.1 vs HTTP/2 negotiation issues for gRPC.
-// REST: http://localhost:5144 (HTTP/1.1)
-// gRPC: http://localhost:5145 (HTTP/2)
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(5144, o => o.Protocols = HttpProtocols.Http1);
-    options.ListenAnyIP(5145, o => o.Protocols = HttpProtocols.Http2);
+    options.ListenAnyIP(restPort, o => o.Protocols = HttpProtocols.Http1);
+    options.ListenAnyIP(grpcPort, o => o.Protocols = HttpProtocols.Http2);
 });
 
 // Add services to the container.
@@ -22,8 +41,6 @@ builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
-string connectionString = builder.Configuration["DbSettings:ConnectionString"] ?? "";
 
 builder.Services.AddDatabase(connectionString);
 
@@ -52,6 +69,7 @@ builder.Services.AddScoped<IFileCounterRepository, FileCounterRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInfraService, InfraService>();
 
 var app = builder.Build();
 

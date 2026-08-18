@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: psql-pv # Recuerda: sin 'namespace'
+spec:
+  capacity:
+    storage: 1Gi 
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain # Retain o Delete
+  volumeMode: Filesystem
+  
+  # Vinculación directa a tu PVC en el namespace mediapipeline
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    namespace: mediapipeline
+    name: psql-pvc
+    
+  # En lugar de CSI, en Minikube usas hostPath para pruebas locales
+  hostPath:
+    path: "/data/psql-pv" # Ruta interna donde se guardarán los datos en la VM/Contenedor de Minikube
+    type: DirectoryOrCreate

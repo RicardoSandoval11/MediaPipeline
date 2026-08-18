@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-service
+  namespace: mediapipeline
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+    - name: go-port
+      appProtocol: tcp
+      port: 80
+      protocol: TCP
+      targetPort: 8080 
+  selector:
+    app: go-service
+  type: ClusterIP

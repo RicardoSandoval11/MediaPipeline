@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: mediapipeline
+  name: psql-statefulset
+spec:
+  minReadySeconds: 15
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 8
+  selector:
+    matchLabels:
+      svc: postgresql
+  serviceName: psql-service
+  template:
+    metadata:
+      labels:
+        svc: postgresql
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "secretpassword"
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: psql-storage
+      volumes:
+        - name: psql-storage
+          persistentVolumeClaim:
+            claimName: psql-pvc
