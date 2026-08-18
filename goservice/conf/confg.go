@@ -1,11 +1,10 @@
 package conf
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
-	"github.com/caarlos0/env"
+	"github.com/caarlos0/env/v11"
 	"github.com/joho/godotenv"
 )
 
@@ -23,23 +22,8 @@ const ENV_FILE_PATH = "conf/.env"
 func GetEnv() (Config, error) {
 	var cfg Config
 
-	_, err := os.Stat(ENV_FILE_PATH)
-
-	if errors.Is(err, os.ErrNotExist) {
-		cfg = Config{
-			ServiceName:         os.Getenv("SERVICE_NAME"),
-			ServiceVersion:      os.Getenv("SERVICE_VERSION"),
-			ApplicationPort:     os.Getenv("APPLICATION_PORT"),
-			FileCounterGrpcAddr: os.Getenv("FILE_COUNTER_GRPC_ADDR"),
-			Environment:         os.Getenv("ENVIRONMENT"),
-			DbConnectionString:  os.Getenv("DATABASE_CONN_STRING"),
-		}
-
-		return cfg, err
-	}
-
-	if err := godotenv.Load(ENV_FILE_PATH); err != nil {
-		return Config{}, err
+	if err := godotenv.Load(ENV_FILE_PATH); err != nil && !os.IsNotExist(err) {
+		return Config{}, fmt.Errorf("error leyendo el archivo .env: %w", err)
 	}
 
 	if err := env.Parse(&cfg); err != nil {

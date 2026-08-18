@@ -20,7 +20,7 @@ spec:
         app: dotnet-service
     spec:
       containers:
-        - command: ["dotnet", "dotnetservice.dll"]
+        - command: ["/app/dotnetservice"]
           envFrom:
             - configMapRef:
                 name: dotnet-configmap
