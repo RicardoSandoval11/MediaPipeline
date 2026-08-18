@@ -4,7 +4,7 @@ data:
   SERVICE_VERSIO: "1.0.0"
   APPLICATION_POR: ":8080"
   ENVIRONMENT: "PROD"
-  FILE_COUNTER_GRPC_ADDR: ""
+  FILE_COUNTER_GRPC_ADDR: "dotnet-service.mediapipeline.svc.cluster.local"
 immutable: true
 kind: ConfigMap
 metadata:

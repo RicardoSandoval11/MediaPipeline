@@ -8,5 +8,5 @@ data:
   Logging__LogLevel__Default: Information
   Logging__LogLevel__Microsoft.AspNetCore: Warning
   AllowedHosts: "*"
-  RestPort: 5144
-  GrpcPort: 5145
+  RestPort: "5144"
+  GrpcPort: "5145"

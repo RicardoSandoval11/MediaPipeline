@@ -7,7 +7,8 @@ spec:
   minReadySeconds: 10
   replicas: 2
   selector:
-    app: dotnet-service
+    matchLabels:
+      app: dotnet-service
   strategy:
     type: RollingUpdate
     rollingUpdate: 
@@ -17,52 +18,52 @@ spec:
     metadata:
       labels:
         app: dotnet-service
-      spec:
-        containers:
-          - command: ["dotnet", "dotnetservice.dll"]
-            envFrom:
-              - configMapRef:
-                  name: dotnet-configmap
-                  optional: false
-              - secretRef:
-                  name: dotnet-secret
-                  optional: false
-            image: mediapipeline_dotnetservice:latest
-            imagePullPolicy: IfNotPresent
-            livenessProbe:
-              failureThreshold: 5
-              httpGet:
-                httpHeaders:
-                  - name: Content-Type
-                    value: application/json
-                path: /livez
-                port: 80
-                scheme: HTTP
-              initialDelaySeconds: 5
-              periodSeconds: 30
-              successThreshold: 1
-              timeoutSeconds: 15 
-            name: goservice
-            ports:
-              - containerPort: 80
-                protocol: TCP
-            readinessProbe:
-              failureThreshold: 5
-              httpGet:
-                httpHeaders:
-                  - name: Content-Type
-                    value: application/json
-                path: /readyz
-                port: 80
-                scheme: HTTP
-              initialDelaySeconds: 5
-              periodSeconds: 10
-              successThreshold: 3
-              timeoutSeconds: 15
-            resources:
-              limits:
-                memory: 500Mi
-                cpu: 2
-              requests:
-                memory: 250Mi
-                cpu: 1
+    spec:
+      containers:
+        - command: ["dotnet", "dotnetservice.dll"]
+          envFrom:
+            - configMapRef:
+                name: dotnet-configmap
+                optional: false
+            - secretRef:
+                name: dotnet-secret
+                optional: false
+          image: mediapipeline_dotnetservice:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              httpHeaders:
+                - name: Content-Type
+                  value: application/json
+              path: /livez
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 15 
+          name: goservice
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 5
+            httpGet:
+              httpHeaders:
+                - name: Content-Type
+                  value: application/json
+              path: /readyz
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 3
+            timeoutSeconds: 15
+          resources:
+            limits:
+              memory: 500Mi
+              cpu: 2
+            requests:
+              memory: 250Mi
+              cpu: 1
