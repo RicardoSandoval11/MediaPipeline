@@ -36,7 +36,7 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
     --self-contained true \
     -r linux-x64 \
     -p:PublishSingleFile=true \
-    -p:PublishTrimmed=true
+    -p:PublishTrimmed=false
 
 ############################
 # 3. Final Image (Chiseled)

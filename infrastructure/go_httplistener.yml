@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: go-httplistener
+  namespace: mediapipeline
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      namespace: mediapipeline
+      name: gateway-api
+      sectionName: rest-listener
+  rules:
+    - matches:
+        - path: 
+            type: PathPrefix
+            value: /upload-file
+      backendRefs:
+        - kind: Service
+          name: go-service
+          namespace: mediapipeline
+          port: 80

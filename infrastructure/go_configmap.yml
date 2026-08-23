@@ -4,9 +4,8 @@ data:
   SERVICE_VERSION: "1.0.0"
   APPLICATION_PORT: ":8080"
   ENVIRONMENT: "PROD"
-  FILE_COUNTER_GRPC_ADDR: "dotnet-service.mediapipeline.svc.cluster.local"
-immutable: true
+  FILE_COUNTER_GRPC_ADDR: "dotnet-service.mediapipeline.svc.cluster.local:81"
 kind: ConfigMap
 metadata:
-  name: go-configmap
+  name: go-configmap-v2
   namespace: mediapipeline

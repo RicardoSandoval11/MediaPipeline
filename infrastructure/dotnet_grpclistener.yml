@@ -1,0 +1,18 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: dotnet-grpclistener
+  namespace: mediapipeline
+spec:
+  parentRefs:
+    - group: ""
+      kind: Service
+      name: dotnet-service
+  rules:
+    - matches:
+      - method:
+          type: Exact
+          service: "file_counter.FileCounterService"
+      backendRefs:
+        - name: dotnet-service
+          port: 81

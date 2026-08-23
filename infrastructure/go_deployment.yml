@@ -23,7 +23,7 @@ spec:
         - command: ["/app/goservice"]
           envFrom:
             - configMapRef:
-                name: go-configmap
+                name: go-configmap-v2
                 optional: false
             - secretRef:
                 name: go-secret
@@ -37,7 +37,7 @@ spec:
                 - name: Content-Type
                   value: application/json
               path: /livez
-              port: 80
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 30
@@ -45,7 +45,7 @@ spec:
             timeoutSeconds: 15 
           name: goservice
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               protocol: TCP
           readinessProbe:
             failureThreshold: 5
@@ -54,7 +54,7 @@ spec:
                 - name: Content-Type
                   value: application/json
               path: /readyz
-              port: 80
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 10

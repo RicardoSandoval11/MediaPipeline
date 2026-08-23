@@ -11,7 +11,7 @@ namespace dotnetservice.Controllers
     {
         private readonly IInfraService _service = serviceProvider.GetRequiredService<IInfraService>();
 
-        [HttpGet("/livez")]
+        [HttpGet("livez")]
         [Produces("application/json")]
         public IActionResult Liveness()
         {
@@ -20,7 +20,7 @@ namespace dotnetservice.Controllers
             return StatusCode((int)HttpStatusCode.OK, response);
         }
 
-        [HttpGet("/readyz")]
+        [HttpGet("readyz")]
         [Produces("application/json")]
         public IActionResult Readiness()
         {
