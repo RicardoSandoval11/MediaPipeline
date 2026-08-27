@@ -52,11 +52,19 @@ func main() {
 	fileRepository := upload.NewPostgresqlRepository(dbInstance)
 	fileCounterEndpoint := upload.NewFileCounterGRPCClient(conn)
 	fileService := upload.NewUploadService(fileCounterEndpoint, fileRepository)
+
 	fileEndpoint := upload.MakeUploadFileEndpoint(fileService)
 	fileUploadHandler := httptransport.NewServer(
 		fileEndpoint,
 		upload.DecodeUploadFileRequest,
 		upload.EncodeUploadFileResponse,
+	)
+
+	getFileEndpoint := upload.MakeGetFileEndpoint(fileService)
+	getFileHandler := httptransport.NewServer(
+		getFileEndpoint,
+		upload.DecodeGetFileRequest,
+		upload.EncodeGetFileResponse,
 	)
 
 	infraService := infra.NewInfraService()
@@ -76,9 +84,10 @@ func main() {
 	)
 
 	mux := http.NewServeMux()
-	mux.Handle("/upload-file", fileUploadHandler)
-	mux.Handle("/readyz", readinessHandler)
-	mux.Handle("/livez", livenessHandler)
+	mux.Handle("/api/v1/file/upload-file", fileUploadHandler)
+	mux.Handle("/api/v1/file/get-file", getFileHandler)
+	mux.Handle("/api/v1/infra/readyz", readinessHandler)
+	mux.Handle("/api/v1/infra/livez", livenessHandler)
 
 	errs := make(chan error)
 

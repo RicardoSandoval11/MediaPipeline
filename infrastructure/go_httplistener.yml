@@ -14,7 +14,7 @@ spec:
     - matches:
         - path: 
             type: PathPrefix
-            value: /upload-file
+            value: /api/v1/file
       backendRefs:
         - kind: Service
           name: go-service

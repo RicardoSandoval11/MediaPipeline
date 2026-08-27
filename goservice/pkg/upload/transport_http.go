@@ -61,3 +61,29 @@ func EncodeUploadFileResponse(_ context.Context, w http.ResponseWriter, response
 	}
 	return json.NewEncoder(w).Encode(response)
 }
+
+func DecodeGetFileRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	publicId := r.URL.Query().Get("publicId")
+
+	if publicId == "" {
+		return nil, errors.New("publicId is required")
+	}
+
+	parsed, err := uuid.Parse(publicId)
+
+	if err != nil {
+		return nil, errors.New("invalid publicId")
+	}
+
+	return GetFileRequest{
+		PublicId: parsed,
+	}, nil
+}
+
+func EncodeGetFileResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	if _, ok := response.(GetFileResponse); !ok {
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	return json.NewEncoder(w).Encode(response)
+}

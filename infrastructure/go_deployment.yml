@@ -36,7 +36,7 @@ spec:
               httpHeaders:
                 - name: Content-Type
                   value: application/json
-              path: /livez
+              path: /api/v1/infra/livez
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 5
@@ -53,7 +53,7 @@ spec:
               httpHeaders:
                 - name: Content-Type
                   value: application/json
-              path: /readyz
+              path: /api/v1/infra/readyz
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 5

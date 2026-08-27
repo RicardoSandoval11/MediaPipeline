@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: go-cronjob
+  namespace: mediapipeline
+spec:
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      completionMode: NonIndexed
+      completions: 1
+      parallelism: 1
+      template:
+        metadata:
+          labels:
+            app: go-job
+        spec:
+          containers:
+            - envFrom:
+                - secretRef:
+                    name: go-secret
+                    optional: false
+              image: mediapipeline_gojob:latest
+              imagePullPolicy: IfNotPresent
+              name: gocronjob
+              resources:
+                requests:
+                  memory: 250Mi
+                  cpu: 250m
+                limits:
+                  memory: 512Mi
+                  cpu: 1000m
+          restartPolicy: OnFailure
+  schedule: "*/15 * * * *" # Every 15 minutes
+  timeZone: America/Guatemala
